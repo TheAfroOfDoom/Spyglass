@@ -1,3 +1,5 @@
+const eslintSpyglassPlugin = require('./eslint-local-rules/index.js')
+
 module.exports = {
 	"extends": [
 		'prettier',
@@ -12,6 +14,7 @@ module.exports = {
 		"project": "./packages/**/tsconfig.json"
 	},
 	"plugins": [
+		"eslint-plugin-local-rules",
 		"@typescript-eslint",
 		"import"
 	],
@@ -30,6 +33,7 @@ module.exports = {
 		"/scripts",
 	],
 	"rules": {
+		"local-rules/locale": "warn",
 		"@typescript-eslint/consistent-type-imports": [
 			"warn",
 			{
