@@ -128,27 +128,27 @@ export function registerLinters(meta: MetaRegistry) {
 	meta.registerLinter('nameOfObjective', {
 		configValidator: configValidator.nameConvention,
 		linter: nameConvention('value'),
-		nodePredicate: (n) => n.symbol && n.symbol.category === 'objective',
+		nodePredicate: (n) => n.symbol?.category === 'objective',
 	})
 	meta.registerLinter('nameOfScoreHolder', {
 		configValidator: configValidator.nameConvention,
 		linter: nameConvention('value'),
-		nodePredicate: (n) => n.symbol && n.symbol.category === 'score_holder',
+		nodePredicate: (n) => n.symbol?.category === 'score_holder',
 	})
 	meta.registerLinter('nameOfTag', {
 		configValidator: configValidator.nameConvention,
 		linter: nameConvention('value'),
-		nodePredicate: (n) => n.symbol && n.symbol.category === 'tag',
+		nodePredicate: (n) => n.symbol?.category === 'tag',
 	})
 	meta.registerLinter('nameOfTeam', {
 		configValidator: configValidator.nameConvention,
 		linter: nameConvention('value'),
-		nodePredicate: (n) => n.symbol && n.symbol.category === 'team',
+		nodePredicate: (n) => n.symbol?.category === 'team',
 	})
 	meta.registerLinter('undeclaredSymbol', {
 		configValidator: configValidator.symbolLinterConfig,
 		linter: undeclaredSymbol,
 		nodePredicate: (n) =>
-			n.symbol && !McdocCategories.includes(n.symbol.category as any),
+			!McdocCategories.includes(n.symbol?.category as any),
 	})
 }

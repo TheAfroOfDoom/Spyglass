@@ -46,7 +46,7 @@ interface LinterRegistration {
 		logger: Logger,
 	) => unknown
 	linter: Linter<AstNode>
-	nodePredicate: (node: AstNode) => unknown
+	nodePredicate: (node: AstNode) => boolean
 }
 
 interface SymbolRegistrarRegistration {
