@@ -1,5 +1,6 @@
 import * as core from '@spyglassmc/core'
 import * as mcdoc from '@spyglassmc/mcdoc'
+import { McfunctionNode } from '@spyglassmc/mcfunction'
 import * as nbt from '@spyglassmc/nbt'
 import { uriBinder } from './binder/index.js'
 import type { McmetaSummary } from './dependency/index.js'
@@ -113,6 +114,12 @@ export const initialize: core.ProjectInitializer = async (ctx) => {
 			(mcdoc.StructFieldNode.is(n.parent) &&
 				mcdoc.StructKeyNode.is(n) &&
 				!n.symbol?.path[0]?.startsWith('::minecraft')),
+	})
+
+	meta.registerLinter('maxLineLength', {
+		configValidator: () => true,
+		linter: core.linter.maxLineLength(),
+		nodePredicate: (n) => McfunctionNode.is(n.parent),
 	})
 
 	jeJson.initialize(ctx)

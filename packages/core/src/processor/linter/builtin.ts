@@ -8,6 +8,8 @@ import { McdocCategories } from '../../symbol/index.js'
 import { undeclaredSymbol } from './builtin/undeclaredSymbol.js'
 import type { Linter } from './Linter.js'
 
+export * from './builtin/maxLineLength.js'
+
 export const noop: Linter<AstNode> = () => {}
 
 /**

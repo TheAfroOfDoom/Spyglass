@@ -212,6 +212,8 @@ export interface LinterConfig {
 	nbtTypeCheck: LinterConfigValue<'strictly' | 'loosely'>
 
 	undeclaredSymbol: LinterConfigValue<SymbolLinterConfig>
+
+	maxLineLength: LinterConfigValue<number>
 }
 
 export interface SnippetsConfig {
@@ -423,6 +425,8 @@ export const VanillaConfig: Config = {
 				then: { declare: 'block' },
 			},
 		],
+
+		maxLineLength: 40,
 	},
 	snippet: {
 		executeIfScoreSet:
