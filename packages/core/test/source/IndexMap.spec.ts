@@ -11,10 +11,11 @@ describe('IndexMap', () => {
 		 * Outer      -             "foo\"bar\u00a7qux"
 		 * Inner      - foo"bar§qux
 		 */
-		const map: IndexMap = [{ outer: Range.create(13, 13), inner: Range.create(0, 0) }, {
-			outer: Range.create(16, 18),
-			inner: Range.create(3, 4),
-		}, { outer: Range.create(21, 27), inner: Range.create(7, 8) }]
+		const map: IndexMap = [
+			{ outer: Range.create(13), inner: Range.create(0) },
+			{ outer: Range.create(16, 18), inner: Range.create(3, 4) },
+			{ outer: Range.create(21, 27), inner: Range.create(7, 8) },
+		]
 		const toInnerCases: { input: number; expected: number }[] = [
 			{ input: 13, expected: 0 },
 			{ input: 14, expected: 1 },
@@ -74,8 +75,8 @@ describe('IndexMap', () => {
 			 * Middle     - helloworld::"foo\"bar\u00a7qux"
 			 * Inner      - foo"bar§qux
 			 */
-			const outerMap: IndexMap = [{ inner: Range.create(0, 0), outer: Range.create(8, 8) }]
-			const innerMap: IndexMap = [{ inner: Range.create(0, 0), outer: Range.create(13, 13) }, {
+			const outerMap: IndexMap = [{ inner: Range.create(0), outer: Range.create(8) }]
+			const innerMap: IndexMap = [{ inner: Range.create(0), outer: Range.create(13) }, {
 				inner: Range.create(3, 4),
 				outer: Range.create(16, 18),
 			}, { inner: Range.create(7, 8), outer: Range.create(21, 27) }]
@@ -91,7 +92,7 @@ describe('IndexMap', () => {
 			 * Inner      - say "hi"
 			 */
 			const outerMap: IndexMap = [
-				{ inner: Range.create(0, 0), outer: Range.create(8, 8) },
+				{ inner: Range.create(0), outer: Range.create(8) },
 				{ inner: Range.create(10, 11), outer: Range.create(18, 20) },
 				{ inner: Range.create(15, 16), outer: Range.create(24, 26) },
 				{ inner: Range.create(16, 17), outer: Range.create(26, 28) },
@@ -99,10 +100,11 @@ describe('IndexMap', () => {
 				{ inner: Range.create(20, 21), outer: Range.create(32, 34) },
 				{ inner: Range.create(21, 22), outer: Range.create(34, 36) },
 			]
-			const innerMap: IndexMap = [{ inner: Range.create(0, 0), outer: Range.create(11, 11) }, {
-				inner: Range.create(4, 5),
-				outer: Range.create(15, 17),
-			}, { inner: Range.create(7, 8), outer: Range.create(19, 21) }]
+			const innerMap: IndexMap = [
+				{ inner: Range.create(0), outer: Range.create(11) },
+				{ inner: Range.create(4, 5), outer: Range.create(15, 17) },
+				{ inner: Range.create(7, 8), outer: Range.create(19, 21) },
+			]
 			const mergedMap = IndexMap.merge(outerMap, innerMap)
 			snapshot(mergedMap)
 		})
