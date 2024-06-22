@@ -19,7 +19,8 @@
 			"port": 6037,
 			"restart": true,
 			"timeout": 180000,
-			"outFiles": ["${workspaceRoot}/packages/vscode-extension/dist/**/*.js"]
+			"outFiles": ["${workspaceRoot}/packages/vscode-extension/dist/**/*.js"],
+			"skipFiles": ["**/<node_internals>/**", "**/node_modules/**"]
 		},
 		{
 			"type": "node",
