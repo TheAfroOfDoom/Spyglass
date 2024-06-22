@@ -16,6 +16,7 @@ export function string(options: StringOptions): InfallibleParser<StringNode> {
 		let start = src.innerCursor
 		const range = Range.create(src)
 		const valueMap = []
+		console.log('A', src.visualizeIndexMap())
 
 		if (options.quotes?.length && (src.peek() === '"' || src.peek() === "'")) {
 			const currentQuote = src.read() as Quote
@@ -41,20 +42,22 @@ export function string(options: StringOptions): InfallibleParser<StringNode> {
 						const hex = src.peek(4)
 						if (/^[0-9a-f]{4}$/i.test(hex)) {
 							src.skip(4)
-							valueMap.push({
-								inner: Range.create(value.length, value.length + 1),
-								outer: Range.create(cStart, src),
-							})
+							// TODO: `push`s are likely handled incorrectly
+							// valueMap.push({
+							// 	inner: Range.create(value.length, value.length + 1),
+							// 	outer: Range.create(cStart, src),
+							// })
 							value += String.fromCharCode(parseInt(hex, 16))
 						} else {
 							ctx.err.report(
 								localize('parser.string.illegal-unicode-escape'),
 								Range.create(src, src.getCharRange(3).end),
 							)
-							valueMap.push({
-								inner: Range.create(value.length, value.length + 1),
-								outer: Range.create(cStart, src),
-							})
+							// TODO: `push`s are likely handled incorrectly
+							// valueMap.push({
+							// 	inner: Range.create(value.length, value.length + 1),
+							// 	outer: Range.create(cStart, src),
+							// })
 							value += c2
 						}
 					} else {
@@ -64,10 +67,11 @@ export function string(options: StringOptions): InfallibleParser<StringNode> {
 								src.getCharRange(-1),
 							)
 						}
-						valueMap.push({
-							inner: Range.create(value.length, value.length + 1),
-							outer: Range.create(cStart, src),
-						})
+						// TODO: `push`s are likely handled incorrectly
+						// valueMap.push({
+						// 	inner: Range.create(value.length, value.length + 1),
+						// 	outer: Range.create(cStart, src),
+						// })
 						value += c2
 					}
 				} else {
@@ -118,6 +122,7 @@ export function string(options: StringOptions): InfallibleParser<StringNode> {
 
 		ans.range.end = src.cursor
 
+		console.log('B', (new Source(ans.value, ans.valueMap)).visualizeIndexMap())
 		return ans
 	}
 }

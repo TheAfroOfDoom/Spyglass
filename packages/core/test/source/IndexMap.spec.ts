@@ -1,7 +1,7 @@
 import { strict as assert } from 'assert'
 import { describe, it } from 'mocha'
 import snapshot from 'snap-shot-it'
-import { IndexMap, Range } from '../../lib/index.js'
+import { IndexMap, Range, Source } from '../../lib/index.js'
 
 describe('IndexMap', () => {
 	describe('to<Inner/Outer>Offset', () => {
@@ -66,7 +66,7 @@ describe('IndexMap', () => {
 		}
 	})
 
-	describe('merge()', () => {
+	describe.only('merge()', () => {
 		it('Should merge correctly', () => {
 			/*
 			 * Index Tens - 0000000000111111111122222222223333333333
@@ -83,7 +83,7 @@ describe('IndexMap', () => {
 			const mergedMap = IndexMap.merge(outerMap, innerMap)
 			snapshot(mergedMap)
 		})
-		it('Should merge nested pairs correctly', () => {
+		it.only('Should merge nested pairs correctly', () => {
 			/*
 			 * Index Tens - 0000000000111111111122222222223333333333
 			 * Index Ones - 0123456789012345678901234567890123456789
@@ -106,10 +106,14 @@ describe('IndexMap', () => {
 				{ inner: Range.create(7, 8), outer: Range.create(19, 21) },
 			]
 			const mergedMap = IndexMap.merge(outerMap, innerMap)
-			snapshot(mergedMap)
+			console.log('       "{Command: \\"say \\\\\\"hi\\\\\\"\\"}"')
+			const middleSrc = new Source('{Command: "say \\"hi\\""}', outerMap)
+			const innerSrc = new Source('say "hi"', mergedMap)
+			console.log(middleSrc.visualizeIndexMap())
+			console.log(innerSrc.visualizeIndexMap())
+			// snapshot(mergedMap)
 		})
-		it('Should not lose outer map ranges that do not overlap with any inner map ranges', () => {
-			// TODO: the name of this test could be more concise
+		it.only('Should not lose outer map ranges that do not overlap with any inner map ranges', () => {
 			const outerMap = [
 				{ inner: Range.create(0), outer: Range.create(13) },
 				{ inner: Range.create(28, 29), outer: Range.create(56, 58) },
@@ -117,7 +121,11 @@ describe('IndexMap', () => {
 			]
 			const innerMap = [{ inner: Range.create(0), outer: Range.create(24) }]
 			const mergedMap = IndexMap.merge(outerMap, innerMap)
-			snapshot(mergedMap)
+			console.log(`{CustomName:'{"hoverEvent":{"value":"{id:\\\'acacia_boat\\\'}"}}'}`)
+			const middleSrc = new Source(`{"hoverEvent":{"value":"{id:'acacia_boat'}"}}`, outerMap)
+			const innerSrc = new Source(`{id:'acacia_boat'}`, mergedMap)
+			console.log(middleSrc.visualizeIndexMap())
+			console.log(innerSrc.visualizeIndexMap())
 		})
 	})
 
