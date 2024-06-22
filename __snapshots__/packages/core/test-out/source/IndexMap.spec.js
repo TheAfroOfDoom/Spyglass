@@ -63,3 +63,16 @@ exports['IndexMap merge() Should merge nested pairs correctly 1'] = [
     }
   }
 ]
+
+exports['IndexMap merge() Should not lose outer map ranges that do not overlap with any inner map ranges 1'] = [
+  {
+    "inner": {
+      "start": 0,
+      "end": 0
+    },
+    "outer": {
+      "start": 37,
+      "end": 37
+    }
+  }
+]

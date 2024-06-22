@@ -108,6 +108,17 @@ describe('IndexMap', () => {
 			const mergedMap = IndexMap.merge(outerMap, innerMap)
 			snapshot(mergedMap)
 		})
+		it('Should not lose outer map ranges that do not overlap with any inner map ranges', () => {
+			// TODO: the name of this test could be more concise
+			const outerMap = [
+				{ inner: Range.create(0), outer: Range.create(13) },
+				{ inner: Range.create(28, 29), outer: Range.create(56, 58) },
+				{ inner: Range.create(40, 41), outer: Range.create(107, 109) },
+			]
+			const innerMap = [{ inner: Range.create(0), outer: Range.create(24) }]
+			const mergedMap = IndexMap.merge(outerMap, innerMap)
+			snapshot(mergedMap)
+		})
 	})
 
 	describe('to<Inner/Outer>Range', () => {
