@@ -390,7 +390,13 @@ export class Project implements ExternalEventEmitter {
 		const loadConfig = async () => {
 			this.config = await this.#configService.load()
 			this.ignore = ignore()
-			for (const pattern of this.config.env.exclude) {
+			const { exclude } = this.config.env
+			this.logger.info(
+				`[Project] [loadConfig] Ignoring using exclude patterns: [ ${
+					exclude.map((s) => `"${s}"`).join(', ')
+				} ]`,
+			)
+			for (const pattern of exclude) {
 				if (pattern === '@gitignore') {
 					const gitignore = await this.readGitignore()
 					if (gitignore) {

@@ -1,3 +1,5 @@
+import { resolve } from 'path'
+
 import * as core from '@spyglassmc/core'
 import * as json from '@spyglassmc/json'
 import { localize } from '@spyglassmc/locales'
@@ -42,14 +44,26 @@ export const initialize: core.ProjectInitializer = async (ctx) => {
 
 	async function findPackMcmeta(): Promise<PackMcmeta | undefined> {
 		const searched = new Set<string>()
+
+		const realExclude = config.env.exclude.map((pattern) =>
+			resolve(pattern).replaceAll('\\', '/')
+		)
+		console.log({ realExclude })
+
 		for (let depth = 0; depth <= 2; depth += 1) {
 			for (const projectRoot of projectRoots) {
-				const files = await externals.fs.getAllFiles(projectRoot, depth + 1)
+				const files = await externals.fs.getAllFiles(projectRoot, {
+					depth: depth + 1,
+					ignore: realExclude,
+					// ignore: config.env.exclude,
+				})
+				console.log({ projectRoot, depth, files })
 				for (const uri of files.filter(uri => uri.endsWith('/pack.mcmeta'))) {
 					if (searched.has(uri)) {
 						continue
 					}
 					searched.add(uri)
+					console.log({ uri, realExclude })
 					const data = await readPackMcmeta(uri)
 					if (data) {
 						logger.info(

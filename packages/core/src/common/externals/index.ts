@@ -57,7 +57,10 @@ export interface ExternalFileSystem {
 	/**
 	 * @returns an array of file URIs under the given `location`.
 	 */
-	getAllFiles(location: FsLocation, depth?: number): Promise<string[]>
+	getAllFiles(
+		location: FsLocation,
+		options?: { depth?: number; ignore?: string[] },
+	): Promise<string[]>
 	/**
 	 * @param options `mode` - File mode bit mask (e.g. `0o775`).
 	 */
