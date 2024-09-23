@@ -244,6 +244,10 @@ export class Service {
 				}' for ${doc.uri} # ${doc.version} @ ${offset} with currentFileOnly=${currentFileOnly}`,
 			)
 			let node = AstNode.findDeepestChild({ node: file, needle: offset })
+			const range = { start: doc.positionAt(offset), end: doc.positionAt(offset + 1) }
+			if (node?.type === 'mcfunction:command' && doc.getText(range) === ' ') {
+				node = AstNode.findDeepestChild({ node: file, needle: offset - 1 })
+			}
 			while (node) {
 				const symbol = this.project.symbols.resolveAlias(node.symbol)
 				if (symbol) {
