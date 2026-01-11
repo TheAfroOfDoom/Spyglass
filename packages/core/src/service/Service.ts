@@ -265,6 +265,43 @@ export class Service {
 				}' for ${doc.uri} # ${doc.version} @ ${offset} with currentFileOnly=${currentFileOnly}`,
 			)
 			let node = AstNode.findDeepestChild({ node: file, needle: offset })
+
+			const isInvalidNode = !node || node.type === 'mcfunction:entry' || node.type === 'file'
+			if (isInvalidNode && doc.uri.endsWith('.mcfunction')) {
+				const sep = '/data/'
+				const relativeFunctionPath = doc.uri.slice(doc.uri.indexOf(sep) + sep.length)
+				const [namespace, functionName] = relativeFunctionPath.replace(/.mcfunction$/, '')
+					.split('/function/')
+				const resourceLocation = `${namespace}:${functionName}`
+
+				const symbol = this.project.symbols.global.function?.[resourceLocation]
+				if (!symbol) {
+					return undefined
+				}
+
+				const rawLocations: SymbolLocation[] = []
+				for (const usage of searchedUsages) {
+					if (usage === 'definition') {
+						continue
+					}
+					let locs = symbol[usage] ?? []
+					if (currentFileOnly) {
+						locs = locs.filter((l) => l.uri === doc.uri)
+					}
+					rawLocations.push(...locs)
+				}
+				const locations: SymbolLocation[] = []
+				for (const loc of rawLocations) {
+					const mappedUri = fileUtil.isFileUri(loc.uri)
+						? loc.uri
+						: await this.project.fs.mapToDisk(loc.uri)
+					if (mappedUri) {
+						locations.push({ ...loc, uri: mappedUri })
+					}
+				}
+				return SymbolLocations.create(file.range, locations.length ? locations : undefined)
+			}
+
 			while (node) {
 				const symbol = this.project.symbols.resolveAlias(node.symbol)
 				if (symbol) {
